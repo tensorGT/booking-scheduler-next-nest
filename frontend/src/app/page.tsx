@@ -10,3 +10,15 @@ interface Slot {
 
 const API = "http://localhost:4020/bookings";
 
+export default function BookingPage() {
+  const [slots, setSlots] = useState<Slot[]>([]);
+  const [email, setEmail] = useState("");
+  const [msg, setMsg] = useState("");
+
+  async function load() {
+    const res = await fetch(`${API}/slots`);
+    if (res.ok) setSlots(await res.json());
+  }
+
+  useEffect(() => {
+    load();
