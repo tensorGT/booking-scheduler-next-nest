@@ -22,3 +22,15 @@ export default function BookingPage() {
 
   useEffect(() => {
     load();
+  }, []);
+
+  async function book(slotId: number) {
+    setMsg("");
+    const res = await fetch(API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slotId, customerEmail: email || "guest@example.com" }),
+    });
+    const data = await res.json();
+    setMsg(res.ok ? "booked!" : data.message || "could not book");
+    load();

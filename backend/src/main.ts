@@ -23,3 +23,15 @@ class BookingController {
   async bookSlot(@Body() body: { slotId: number; customerEmail: string }) {
     const client = await pool.connect();
     try {
+      await client.query("BEGIN");
+      const slot = (await client.query("SELECT * FROM slots WHERE id = $1 FOR UPDATE", [body.slotId])).rows[0];
+      if (!slot) throw new BadRequestException("slot not found");
+      if (slot.is_booked) throw new BadRequestException("sorry, slot already booked!");
+
+      await client.query("UPDATE slots SET is_booked = TRUE WHERE id = $1", [body.slotId]);
+      const booking = (
+        await client.query("INSERT INTO bookings (slot_id, customer_email) VALUES ($1, $2) RETURNING *", [
+          body.slotId,
+          body.customerEmail,
+        ])
+      ).rows[0];
