@@ -34,3 +34,15 @@ export default function BookingPage() {
     const data = await res.json();
     setMsg(res.ok ? "booked!" : data.message || "could not book");
     load();
+  }
+
+  return (
+    <main style={{ maxWidth: 640, margin: "32px auto", fontFamily: "sans-serif", padding: "0 16px" }}>
+      <h1>Appointment Scheduler</h1>
+      <input
+        type="email"
+        placeholder="your email..."
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        style={{ marginBottom: 12, padding: 8 }}
+      />

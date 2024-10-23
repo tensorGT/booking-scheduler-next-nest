@@ -35,3 +35,16 @@ class BookingController {
           body.customerEmail,
         ])
       ).rows[0];
+      await client.query("COMMIT");
+      return booking;
+    } catch (err) {
+      await client.query("ROLLBACK");
+      throw err;
+    } finally {
+      client.release();
+    }
+  }
+
+  @Patch(":id/status")
+  async updateStatus(@Param("id") id: string, @Body() body: { status: "confirmed" | "cancelled" }) {
+    return (
