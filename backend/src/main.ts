@@ -48,3 +48,16 @@ class BookingController {
   @Patch(":id/status")
   async updateStatus(@Param("id") id: string, @Body() body: { status: "confirmed" | "cancelled" }) {
     return (
+      await pool.query("UPDATE bookings SET status = $1 WHERE id = $2 RETURNING *", [body.status, Number(id)])
+    ).rows[0];
+  }
+}
+
+@Module({ controllers: [BookingController] })
+class AppModule {}
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule, { cors: true });
+  await app.listen(process.env.PORT || 4020);
+}
+bootstrap();

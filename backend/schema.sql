@@ -7,3 +7,6 @@ CREATE TABLE IF NOT EXISTS slots (
 CREATE TABLE IF NOT EXISTS bookings (
   id SERIAL PRIMARY KEY,
   slot_id INTEGER UNIQUE NOT NULL REFERENCES slots(id) ON DELETE CASCADE,
+  customer_email VARCHAR(140) NOT NULL,
+  status VARCHAR(20) NOT NULL DEFAULT 'booked' CHECK (status IN ('booked', 'confirmed', 'cancelled'))
+);

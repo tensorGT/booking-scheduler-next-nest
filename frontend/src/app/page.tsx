@@ -46,3 +46,15 @@ export default function BookingPage() {
         onChange={(e) => setEmail(e.target.value)}
         style={{ marginBottom: 12, padding: 8 }}
       />
+      {msg && <p>{msg}</p>}
+      <ul>
+        {slots.map((s) => (
+          <li key={s.id} style={{ marginBottom: 8 }}>
+            {new Date(s.starts_at).toLocaleString()} —{" "}
+            {s.is_booked ? <span>Taken</span> : <button onClick={() => book(s.id)}>Book</button>}
+          </li>
+        ))}
+      </ul>
+    </main>
+  );
+}
